@@ -56,15 +56,15 @@ public class Test {
 					
 					System.out.println("==========================================================================================================================================\n");
 					System.out.println("12. (EXTRA) Print the difference of dishesnames between the person that has eaten the most dishes and the least. \n");
-					//queriesJWang.extraQuery2();
+					queriesJWang.extraQuery2();
 					
 					System.out.println("==========================================================================================================================================\n");
 					System.out.println("13. INSERT INTO serves (restaurname, dish, price) VALUES ('Dish2Eat', 'tortilla', '2.50')\n");
-					//queriesJWang.insertTrasaction();
+					queriesJWang.insertTransaction();
 					
 					System.out.println("==========================================================================================================================================\n");
 					System.out.println("14. Try to update English to Chinese and French to Spanish\n");
-					//queriesJWang.insertTrasaction();
+					queriesJWang.updateTransaction();
 				}
 		
 }
