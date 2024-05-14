@@ -85,7 +85,7 @@ public class JWangQueries {
                 String restaurantName = rs.getString("restaurname");
                 String city = rs.getString("city");
                 double rating = rs.getDouble("rating");
-                System.out.println("Restaurant: " + restaurantName + ", \t City: " + city + ", \t Rating: " + rating);
+                System.out.println("Restaurant: " + restaurantName + " \t\t City: " + city + "\t\t Rating: " + rating);
             }
 
 		} catch (SQLException ex) {
@@ -127,10 +127,7 @@ public class JWangQueries {
                 int salary = rs.getInt("Salary");
                 int numHotels = rs.getInt("numHotels");
 
-                System.out.println("Nombre: " + firstName + " " + lastName);
-                System.out.println("Salario: " + salary);
-                System.out.println("Número de hoteles: " + numHotels);
-                System.out.println("--------------------------");
+                System.out.println("Name: " + firstName + " \t\tSurname: " + lastName + "\t\tSalary: " + salary + "\t\tNº of hotels: " + numHotels);
             }
             
 		} catch (SQLException ex) {
@@ -173,7 +170,7 @@ public class JWangQueries {
             
             while (rs.next()) {
                 String genre = rs.getString("genre");
-                System.out.println("Género de película: " + genre);
+                System.out.println("Genre: " + genre);
             }
             
 		} catch (SQLException ex) {
@@ -203,7 +200,7 @@ public class JWangQueries {
 			
 			
 			//show before SERVES and DISHES relations
-			System.out.println("================= DISHES RELATION BEFORE INSERTING ================= \n");
+			System.out.println("\n\n\n================= DISHES RELATION BEFORE INSERTING ================= \n");
 			String beforeDishes = "SELECT * FROM dishes";
 							
 			rs = st.executeQuery(beforeDishes);
@@ -218,7 +215,7 @@ public class JWangQueries {
             }
             
             
-			System.out.println("================= SERVES RELATION BEFORE INSERTING ================= \n");
+			System.out.println("\n\n\n================= SERVES RELATION BEFORE INSERTING ================= \n");
 			String beforeServes = "SELECT * FROM serves";
 							
 			rs = st.executeQuery(beforeServes);
@@ -239,7 +236,7 @@ public class JWangQueries {
             	
             } catch (SQLException ex) {
     			if (ex.getMessage().contains("dish")) {
-    				System.out.println("The dish isn't in dishes relation, so foreign constraint it's violated!!! Let's rollback.");
+    				System.out.println("\n\nThe dish isn't in dishes relation, so foreign constraint it's violated!!! Let's rollback.");
     				//enter = true;
     				
     				try {
@@ -253,14 +250,14 @@ public class JWangQueries {
             }
             
             
-            System.out.println("Let's try again inserting first the tortilla dish to dishes relation");
+            System.out.println("\n\nLet's try again inserting first the tortilla dish to dishes relation");
 			System.out.println("Inserting into dishes relation...");
 			String update2 = ("INSERT INTO dishes (dish, cuisine, category, difficulty) VALUES ('tortilla', 'Spanish', 'Main Course', '2.00')");
 			st.executeUpdate(update2);
 			System.out.println("Tortilla inserted to dishes relation!!!\n\n");
 			conn.commit();
 			
-			System.out.println("Trying again to insert serve in relation...");
+			System.out.println("\n\nTrying again to insert serve in relation...");
 			String update1 = ("INSERT INTO serves (restaurname, dish, price) VALUES ('Dish2Eat', 'tortilla', '2.50')");
 			st.executeUpdate(update1);
 			
@@ -270,7 +267,7 @@ public class JWangQueries {
 			
 
 			//show after of relations
-			System.out.println("================= DISHES RELATION AFTER INSERTING ================= \n");
+			System.out.println("\n\n\n================= DISHES RELATION AFTER INSERTING ================= \n");
 			String afterDishes = "SELECT * FROM dishes";
 							
 			rs = st.executeQuery(afterDishes);
@@ -285,7 +282,7 @@ public class JWangQueries {
             }
 			
 			
-			System.out.println("================= SERVES RELATION AFTER INSERTING ================= \n");
+			System.out.println("\n\n\n================= SERVES RELATION AFTER INSERTING ================= \n");
 			String afterServes = "SELECT * FROM serves";
 							
 			rs = st.executeQuery(afterServes);
@@ -346,7 +343,7 @@ public class JWangQueries {
 			
 			
 			//show before
-			System.out.println("================= LANGUAGES SPOKEN BY GUIDE ID:72515633 BEFORE UPDATE ================= \n");
+			System.out.println("\n\n\n================= LANGUAGES SPOKEN BY GUIDE ID:72515633 BEFORE UPDATE ================= \n");
 			String beforeLang = "SELECT Lang FROM languages WHERE GuideId = 72515633";
 							
 			rs = st.executeQuery(beforeLang);
@@ -365,7 +362,7 @@ public class JWangQueries {
             savepoint1 = conn.setSavepoint("savepoint1");
             
             try {
-	            System.out.println("Let's try changing from French to Spanish...");
+	            System.out.println("\n\nLet's try changing from French to Spanish...");
 	    		String update2 = ("UPDATE languages SET Lang = 'Spanish' WHERE GuideId = '72515633' AND Lang = 'French'");
 	    		st.executeUpdate(update2);
             }catch(SQLException ex){
@@ -387,7 +384,7 @@ public class JWangQueries {
 			
 
 			//show after
-			System.out.println("================= LANGUAGES SPOKEN BY GUIDE ID:72515633 AFTER UPDATE ================= \n");
+			System.out.println("\n\n\n================= LANGUAGES SPOKEN BY GUIDE ID:72515633 AFTER UPDATE ================= \n");
 			String afterLang = "SELECT Lang FROM languages WHERE GuideId = 72515633";
 							
 			rs = st.executeQuery(afterLang);
@@ -452,10 +449,7 @@ public class JWangQueries {
                 Date departureDate = rs.getDate("DepartureDate");
                 int totalNights = rs.getInt("totalNights");
 
-                System.out.println("Destino del viaje: " + tripTo);
-                System.out.println("Fecha de salida: " + departureDate);
-                System.out.println("Total de noches reservadas: " + totalNights);
-                System.out.println("--------------------------");
+                System.out.println("Tripto: " + tripTo + "\t\tDeparture Date: " + departureDate + "\t\tTotal nº of nights" + totalNights);
             }
             
             rs = st.executeQuery(query);
@@ -503,7 +497,7 @@ public class JWangQueries {
 			
 			while(rs.next()) {
 				String dish = rs.getString("dish");
-                System.out.println(dish);			
+                System.out.println("Dish: " + dish);			
                 }
 
 		} catch (SQLException ex) {

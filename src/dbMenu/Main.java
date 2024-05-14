@@ -47,8 +47,7 @@ public class Main {
 		System.out.println("11. (EXTRA) Retrieve the TripTo, DepartureDate, and totalNights of the trips that across all customers have more totalNights than the average.");
 		System.out.println("12. (EXTRA) Print the difference of dishesnames between the person that has eaten the most dishes and the least.");
 		System.out.println("13. Try to INSERT INTO serves (restaurname, dish, price) VALUES ('Dish2Eat', 'tortilla', '2.50')");
-		System.out.println("14. Try to update English to Chinese and French to Spanish\n"
-				+ "		try {");
+		System.out.println("14. Try to update English to Chinese and French to Spanish\n");
 		System.out.println("0. Exit.");
 		System.out.println("\nWrite your choice: ");
 	}
