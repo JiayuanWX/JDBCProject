@@ -234,8 +234,8 @@ public class JWangQueries {
             
             try {//adding tortilla to Dish2Eat which does not exist in the DISHES table (foreign key constraint fails)
             	savepoint1 = conn.setSavepoint("savepoint1");
-    			String update1 = ("INSERT INTO serves (restaurname, dish, price) VALUES ('Dish2Eat', 'tortilla', '2.50')");
-    			st.executeUpdate(update1);
+    			String insert1 = ("INSERT INTO serves (restaurname, dish, price) VALUES ('Dish2Eat', 'tortilla', '2.50')");
+    			st.executeUpdate(insert1);
             	
             } catch (SQLException ex) {
     			if (ex.getMessage().contains("dish")) {
@@ -309,7 +309,7 @@ public class JWangQueries {
 	
 	}
 	
-	private void resetInsertTransData() {
+	private void resetInsertTransData() {//just for it to do the same every ejecution
 		try {
 			openConnection();
 			
@@ -332,22 +332,100 @@ public class JWangQueries {
 	
 	
 	
-	public void updateTransaction() {
+	public void updateTransaction() {// try to update English to Chinese(successfull) and French to Spanish (duplicated rollback)
 		try {
 			openConnection();
-
-			st = conn.createStatement();
-		} catch (SQLException ex) {
 			
-			System.out.println("Something went wrong!");
+			try {
+				conn.setAutoCommit(false);
+			}catch(SQLException e) {
+				System.out.println("Something went wrong when disabling autocommit");
+			}
+			
+			st = conn.createStatement();
+			
+			
+			//show before
+			System.out.println("================= LANGUAGES SPOKEN BY GUIDE ID:72515633 BEFORE UPDATE ================= \n");
+			String beforeLang = "SELECT Lang FROM languages WHERE GuideId = 72515633";
+							
+			rs = st.executeQuery(beforeLang);
+			
+            while (rs.next()) {
+                String language = rs.getString("Lang"); 		
+                System.out.println("Language: " + language);
+            }
+            
+            
+            System.out.println("\n\nLet's try changing from English to Chinese...");
+    		String update1 = ("UPDATE languages SET Lang = 'Chinese' WHERE GuideId = '72515633' AND Lang = 'English'");
+    		st.executeUpdate(update1);
+            System.out.println("Succesfully updated language from English to Chinese!!\n\n");
+            
+            savepoint1 = conn.setSavepoint("savepoint1");
+            
+            try {
+	            System.out.println("Let's try changing from French to Spanish...");
+	    		String update2 = ("UPDATE languages SET Lang = 'Spanish' WHERE GuideId = '72515633' AND Lang = 'French'");
+	    		st.executeUpdate(update2);
+            }catch(SQLException ex){
+    			if (ex.getMessage().contains("Duplicate")) {
+    				System.out.println("The guide with ID:72515633 already speaks Spanish, let's rollback to savepoint.");
+    			
+    				try {
+    					conn.rollback(savepoint1);
+    					System.out.println("Rolledback!\n");
+    				} catch (SQLException e) {
+    					System.out.println("Couldn't rollback to savepoint1!!");
+    					e.printStackTrace();
+    				}
+    			}
+            }
+            
+			conn.commit();
+
+			
+
+			//show after
+			System.out.println("================= LANGUAGES SPOKEN BY GUIDE ID:72515633 AFTER UPDATE ================= \n");
+			String afterLang = "SELECT Lang FROM languages WHERE GuideId = 72515633";
+							
+			rs = st.executeQuery(afterLang);
+			
+            while (rs.next()) {
+                String language = rs.getString("Lang"); 		
+                System.out.println("Language: " + language);
+            }
+			
+			resetUpdateTransData();
+			
+		} catch (SQLException ex) {
+				System.out.println("Something went wrong!");
+				ex.printStackTrace();
 			
 		} finally {
 
 			closeConnection();
-
 		}
 
 	
+	}
+	
+	private void resetUpdateTransData() {//just for it to do the same every ejecution
+		try {
+			openConnection();
+			
+			st = conn.createStatement();
+			
+			String restoreLanguage = "UPDATE languages SET Lang = 'English' WHERE GuideId = 72515633 AND Lang = 'Chinese'";
+			st.executeUpdate(restoreLanguage);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}finally {
+			closeConnection();
+		}
 	}
 	
 	

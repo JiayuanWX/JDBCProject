@@ -59,11 +59,11 @@ public class Test {
 					//queriesJWang.extraQuery2();
 					
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("13.  \n");
+					System.out.println("13. INSERT INTO serves (restaurname, dish, price) VALUES ('Dish2Eat', 'tortilla', '2.50')\n");
 					//queriesJWang.insertTrasaction();
 					
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("14.  \n");
+					System.out.println("14. Try to update English to Chinese and French to Spanish\n");
 					//queriesJWang.insertTrasaction();
 				}
 		
