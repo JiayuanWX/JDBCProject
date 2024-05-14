@@ -8,34 +8,29 @@ public class Test {
 					IVilaQueries queriesIVila = new IVilaQueries();
 					JWangQueries queriesJWang = new JWangQueries();
 
-					System.out.println("\n============================== Queries made by Iñigo Vilá ==============================\n");
+					System.out.println("\n==============================Queries made by Iñigo Vilá==============================\n");
 					System.out.println("1. Retrieve the employee with the highest salary among the TWO employees who have the most female dependents and no male dependents.\n");
 					queriesIVila.query1();
-					
 					System.out.println("==========================================================================================================================================\n");
 					System.out.println("2. For each city find the hotel most chosen among all customers, jointly with the number of times that it has been chosen\n");
 					queriesIVila.query2();
-					
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("3. Return the customer ID's, name and count of different trip destinations of those customers that have gone on at least\n"
+					System.out.println("3. Return the customer ID's, name and count of different trip destinations of those customers that have gone on at least \n"
 							+ "the same number of trips than the employee that works the least hours. \n");
 					queriesIVila.query3();
-					
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("4. (EXTRA) For each language show the country with most population ordered by descending country population. \n");
+					System.out.println("4. For each language show the country with most population. \n");
 					queriesIVila.extraQuery1();
-					
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("5. (EXTRA)\n");
-					//queriesIVila.extraQuery2();
-					
+					System.out.println("5. For each language show the country with most population. \n");
+					queriesIVila.extraQuery2();
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("6.  \n");
-					//queriesIVila.insertTrasaction();
-					
+					System.out.println("6. Try to INSERT INTO dependent a new dependent for the employee with ssn 999999999");
+					queriesIVila.insertTransaction();
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("6.  \n");
-					//queriesIVila.insertTrasaction();
+					System.out.println("7. Try to UPDATE num nights from 5 to 10 for a certain customer\n");
+					queriesIVila.updateTransaction();
+					System.out.println("==========================================================================================================================================\n");
 					
 					System.out.println("\n============================== Queries made by Jiayuan Wang ==============================\n");
 					System.out.println("==========================================================================================================================================\n");

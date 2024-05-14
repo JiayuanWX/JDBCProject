@@ -1,13 +1,20 @@
 package queries;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Savepoint;
+import java.sql.Statement;
 
 public class IVilaQueries {
-  
+
 	Connection conn = null;
 	Statement st;
 	ResultSet rs;
 	PreparedStatement pst;
+	Savepoint savepoint1 = null;
 	
 	public IVilaQueries () {
 	}
@@ -184,7 +191,6 @@ public class IVilaQueries {
 		}
 
 	}
-	
 
 	public void extraQuery1() {
 		
@@ -227,6 +233,276 @@ public class IVilaQueries {
 
 	}
 	
+	public void extraQuery2() {
+		
+		try {
+			openConnection();
 
+			st = conn.createStatement();
+			
+			String query = "SELECT p.nameId, COUNT(DISTINCT r.restaurname) AS NewYorkRestaurantsVisited " +
+	                  "FROM person p " +
+	                  "JOIN frequents f ON p.nameId = f.nameId " +
+	                  "JOIN restaurant r ON f.restaurname = r.restaurname " +
+	                  "WHERE r.city = 'New York' " +
+	                  "GROUP BY p.nameId " +
+	                  "HAVING NewYorkRestaurantsVisited = ( " +
+	                  "    SELECT COUNT(*) " +
+	                  "    FROM restaurant " +
+	                  "    WHERE city = 'New York' " +
+	                  ")";
+     
+				rs = st.executeQuery(query);
 
+     // Process the result set
+			
+			while(rs.next()) {
+				String name = rs.getString("nameId");
+				int num = rs.getInt("NewYorkRestaurantsVisited");
+                System.out.println(name + " has visited " + num + " restaurants of New York.");			
+                }
+
+		} catch (SQLException ex) {
+			
+			System.out.println("Something went wrong!");
+			
+		} finally {
+
+			closeConnection();
+
+		}
+
+	}
+	
+	
+	public void insertTransaction() {
+		try {
+			openConnection();
+
+			try {
+				conn.setAutoCommit(false);
+			} catch (SQLException e) {
+				System.out.println("Something went wrong when disabling autocommit");
+			}
+
+			st = conn.createStatement();
+
+			// Show EMPLOYEE relation before inserting
+			System.out.println("================= EMPLOYEE RELATION BEFORE INSERTING =================\n");
+			String beforeEmployees = "SELECT * FROM employee";
+			rs = st.executeQuery(beforeEmployees);
+
+			while (rs.next()) {
+				String fname = rs.getString("Fname");
+				String lname = rs.getString("Lname");
+				String ssn = rs.getString("Ssn");
+				String sex = rs.getString("Sex");
+				Double salary = rs.getDouble("Salary");
+				String supSsn = rs.getString("Super_ssn");
+				int dno = rs.getInt("Dno");
+
+				System.out.println("Employee name: " + fname + "\t last name: " + lname + "\t ssn: " + ssn + "\t sex: " + sex + "\t salary: " + salary + "\t super ssn: " + supSsn + "\t dno: " + dno + "\n");
+			}
+
+			// Show DEPENDENT relation before inserting
+			System.out.println("================= DEPENDENT RELATION BEFORE INSERTING =================\n");
+			String beforeDependents = "SELECT * FROM dependent";
+			rs = st.executeQuery(beforeDependents);
+
+			while (rs.next()) {
+				String essn = rs.getString("Essn");
+				String dependentName = rs.getString("Dependent_name");
+				String sex = rs.getString("Sex");
+				String bdate = rs.getString("Bdate");
+				String relationship = rs.getString("Relationship");
+
+				System.out.println("Essn: " + essn + "\t dependent name: " + dependentName + "\t sex: " + sex + "\t birth date: " + bdate + "\t relationship: " + relationship + "\n");
+			}
+
+			try {
+				// Adding a dependent to an employee that does not exist
+				savepoint1 = conn.setSavepoint("savepoint1");
+				String update1 = "INSERT INTO dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('999999999', 'John', 'M', '2010-05-15', 'Son')";
+				st.executeUpdate(update1);
+
+			} catch (SQLException ex) {
+				if (ex.getMessage().contains("Essn")) {
+					System.out.println("The employee doesn't exist in EMPLOYEE relation, so foreign key constraint is violated!!! Let's rollback.");
+
+					try {
+						conn.rollback(savepoint1);
+						System.out.println("Rolled back!\n");
+					} catch (SQLException e) {
+						System.out.println("Couldn't rollback to savepoint1!!");
+						e.printStackTrace();
+					}
+				}
+			}
+
+			System.out.println("Let's try again inserting the employee first into the EMPLOYEE relation");
+			System.out.println("Inserting into EMPLOYEE relation...");
+			String update2 = "INSERT INTO employee (Fname, Lname, Ssn, Sex, Salary, Super_ssn, Dno) VALUES ('Jack', 'Doe', '999999999', 'M', 30000, NULL, 1)";
+			st.executeUpdate(update2);
+			System.out.println("Jack Doe inserted into EMPLOYEE relation!!!\n\n");
+			conn.commit();
+
+			System.out.println("Trying again to insert the dependent in relation...");
+			String update3 = "INSERT INTO dependent (Essn, Dependent_name, Sex, Bdate, Relationship) VALUES ('999999999', 'Jack Jr.', 'M', '2010-05-15', 'Son')";
+			st.executeUpdate(update3);
+
+			conn.commit();
+			System.out.println("Jack Doe's dependent inserted into DEPENDENT relation!!!\n\n");
+
+			// Show EMPLOYEE relation after inserting
+			System.out.println("================= EMPLOYEE RELATION AFTER INSERTING =================\n");
+			String afterEmployees = "SELECT * FROM employee";
+			rs = st.executeQuery(afterEmployees);
+
+			while (rs.next()) {
+				String fname = rs.getString("Fname");
+				String lname = rs.getString("Lname");
+				String ssn = rs.getString("Ssn");
+				String sex = rs.getString("Sex");
+				Double salary = rs.getDouble("Salary");
+				String supSsn = rs.getString("Super_ssn");
+				int dno = rs.getInt("Dno");
+
+				System.out.println("Employee name: " + fname + "\t last name: " + lname + "\t ssn: " + ssn + "\t sex: " + sex + "\t salary: " + salary + "\t super ssn: " + supSsn + "\t dno: " + dno + "\n");
+			}
+
+			// Show DEPENDENT relation after inserting
+			System.out.println("================= DEPENDENT RELATION AFTER INSERTING =================\n");
+			String afterDependents = "SELECT * FROM dependent";
+			rs = st.executeQuery(afterDependents);
+
+			while (rs.next()) {
+				String essn = rs.getString("Essn");
+				String dependentName = rs.getString("Dependent_name");
+				String sex = rs.getString("Sex");
+				String bdate = rs.getString("Bdate");
+				String relationship = rs.getString("Relationship");
+
+				System.out.println("Essn: " + essn + "\t dependent name: " + dependentName + "\t sex: " + sex + "\t birth date: " + bdate + "\t relationship: " + relationship + "\n");
+			}
+
+			resetInsertTransData();
+
+		} catch (SQLException ex) {
+			System.out.println("Something went wrong!\n" + ex.getMessage());
+		} finally {
+			closeConnection();
+		}
+	}
+
+	private void resetInsertTransData() {
+		try {
+			openConnection();
+
+			st = conn.createStatement();
+
+			String deleteDependent = "DELETE FROM dependent WHERE Essn = '999999999' AND Dependent_name = 'Jack Jr.'";
+			st.executeUpdate(deleteDependent);
+
+			String deleteEmployee = "DELETE FROM employee WHERE Ssn = '999999999'";
+			st.executeUpdate(deleteEmployee);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+			closeConnection();
+		}
+	}
+	
+	public void updateTransaction() {
+	    // Try to update NumNights for a specific trip
+	    try {
+	        openConnection();
+
+	        try {
+	            conn.setAutoCommit(false);
+	        } catch (SQLException e) {
+	            System.out.println("Something went wrong when disabling autocommit");
+	        }
+
+	        st = conn.createStatement();
+
+	        // Show before
+	        System.out.println("================= NumNights FOR CUSTOMER ID: 10000025 BEFORE UPDATE ================= \n");
+	        String beforeUpdate = "SELECT NumNights FROM hotel_trip_customer WHERE customerid = 10000025 AND TripTo = 'Hong Kong' AND DepartureDate = '2018-01-05' AND hotelid = 'h07'";
+
+	        rs = st.executeQuery(beforeUpdate);
+
+	        while (rs.next()) {
+	            int NumNights = rs.getInt("NumNights");
+	            System.out.println("NumNights: " + NumNights);
+	        }
+
+	        // Attempt to update NumNights
+	        System.out.println("\n\nLet's try changing NumNights to 10 for customer ID 10000025...");
+	        String update1 = "UPDATE hotel_trip_customer SET NumNights = 10 WHERE customerid = 10000025 AND TripTo = 'Hong Kong' AND DepartureDate = '2018-01-05' AND hotelid = 'h07' AND NumNights = 5";
+	        st.executeUpdate(update1);
+	        System.out.println("Successfully updated NumNights to 10!!\n\n");
+
+	        savepoint1 = conn.setSavepoint("savepoint1");
+
+	        try {
+	            System.out.println("Let's try changing date of a trip for customer ID 10000025...");
+	            String update2 = "UPDATE hotel_trip_customer SET DepartureDate = '2018-01-05' WHERE customerid = 10000025 AND TripTo = 'Hong Kong' AND DepartureDate = '2019-11-25' AND hotelid = 'h07'";
+	            st.executeUpdate(update2);
+	        } catch (SQLException ex) {
+	            if (ex.getMessage().contains("Duplicate")) {
+	                System.out.println("The customer with ID: 10000025 already has a trip to Hong Kong for that date and hotel, let's rollback to savepoint.");
+
+	                try {
+	                    conn.rollback(savepoint1);
+	                    System.out.println("Rolled back!\n");
+	                } catch (SQLException e) {
+	                    System.out.println("Couldn't rollback to savepoint1!!");
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+
+	        conn.commit();
+
+	        // Show after
+	        System.out.println("================= NumNights FOR CUSTOMER ID: 10000025 AFTER UPDATE ================= \n");
+	        String afterUpdate = "SELECT NumNights FROM hotel_trip_customer WHERE customerid = 10000025 AND TripTo = 'Hong Kong' AND DepartureDate = '2018-01-05' AND hotelid = 'h07'";
+
+	        rs = st.executeQuery(afterUpdate);
+
+	        while (rs.next()) {
+	            int NumNights = rs.getInt("NumNights");
+	            System.out.println("NumNights: " + NumNights);
+	        }
+
+	        resetUpdateTransData();
+
+	    } catch (SQLException ex) {
+	        System.out.println("Something went wrong!");
+	        ex.printStackTrace();
+
+	    } finally {
+	        closeConnection();
+	    }
+	}
+
+	private void resetUpdateTransData() {
+	    // Just for it to do the same every execution
+	    try {
+	        openConnection();
+
+	        st = conn.createStatement();
+
+	        String restoreNumNights = "UPDATE hotel_trip_customer SET NumNights = 5 WHERE customerid = 10000025 AND TripTo = 'Hong Kong' AND DepartureDate = '2018-01-05' AND hotelid = 'h12' AND NumNights = 10";
+	        st.executeUpdate(restoreNumNights);
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+
+	    } finally {
+	        closeConnection();
+	    }
+	}
 }

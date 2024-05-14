@@ -36,10 +36,10 @@ public class Main {
 		System.out.println("1. Return the department where its employees have the highest average of hours worked.");
 		System.out.println("2. Return all pairs of customers that don't take part in any optional excursion.");
 		System.out.println("3. Return the employees with the minimum average of salary per hour worked.");
-		System.out.println("4. (EXTRA) For each language show the country with most population ordered by descending country population. \n");
-		System.out.println("5. (EXTRA)  \n");
-		System.out.println("6. TODO.");
-		System.out.println("7. TODO.");
+		System.out.println("4. (EXTRA) For each language show the country with most population.");
+		System.out.println("5. (EXTRA) Retrieve the name of the clients that have visited all restaurants of the city of New York.");
+		System.out.println("6. Try to INSERT INTO dependent a new dependent for the employee with ssn 999999999");
+		System.out.println("7. Try to UPDATE num nights from 5 to 10 for a certain customer\n");
 		System.out.println("\n========== Queries made by Jiayuan Wang ==========\n");
 		System.out.println("8. Retrieve the rating of the restaurants that serve ‘cheesecake’ or ‘pepperonipizza’ which has at least one daily sale of an amount greater than 10000 but less than 20000.");
 		System.out.println("9. Retrieve the Fname, Lname, salary, and nº of hotels visited, for employees who are also customers, have not visited 'Biarritz' and earn more than 30000, sorted by salary.");
@@ -55,7 +55,7 @@ public class Main {
 	public static void checkOption(int option) {
 		switch (option) {
 			case 0:
-				System.out.println("Gud, bye!");
+				System.out.println("See you!");
 				break;
 			case 1:
 				queriesIVila.query1();
@@ -70,13 +70,13 @@ public class Main {
 				queriesIVila.extraQuery1();
 				break;
 			case 5:
-				//queriesIVila.extraQuery2();
+				queriesIVila.extraQuery2();
 				break;
 			case 6:
-				//queriesVila.insertTransaction();
+				queriesIVila.insertTransaction();
 				break;
 			case 7:
-				//queriesVila.updateTrasaction();
+				queriesIVila.updateTransaction();
 				break;
 			case 8:
 				queriesJWang.query1();
