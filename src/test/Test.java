@@ -58,7 +58,7 @@ public class Test {
 					queriesJWang.insertTransaction();
 					
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("14. Try to update English to Chinese and French to Spanish\n");
+					System.out.println("14. Try to UPDATE languages of the guide with ID: 72515633, from English to Chinese and from French to Spanish\n");
 					queriesJWang.updateTransaction();
 				}
 		
