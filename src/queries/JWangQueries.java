@@ -444,18 +444,21 @@ public class JWangQueries {
                     "    ) AS nightsPerTrip" +
                     ")";
             
+            rs = st.executeQuery(query);
+            
             while (rs.next()) {
                 String tripTo = rs.getString("TripTo");
                 Date departureDate = rs.getDate("DepartureDate");
                 int totalNights = rs.getInt("totalNights");
 
-                System.out.println("Tripto: " + tripTo + "\t\tDeparture Date: " + departureDate + "\t\tTotal nº of nights" + totalNights);
+                System.out.println("Tripto: " + tripTo + "\t\tDeparture Date: " + departureDate + "\t\tTotal nº of nights: " + totalNights);
             }
             
             rs = st.executeQuery(query);
 		} catch (SQLException ex) {
 			
 			System.out.println("Something went wrong!");
+			ex.printStackTrace();
 			
 		} finally {
 

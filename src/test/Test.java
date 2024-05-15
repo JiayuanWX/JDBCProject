@@ -38,7 +38,7 @@ public class Test {
 					queriesJWang.query1();
 					
 					System.out.println("==========================================================================================================================================\n");
-					System.out.println("9. Retrieve the Fname, Lname, salary, and nº of hotels visited, for employees who are also customers, have not visited 'Biarritz' and earn more than 30000, sorted by salary. \n");
+					System.out.println("9. Retrieve the Fname, Lname, salary, and nº of hotels visited, for employees who are also customers, have not visited 'Biarritz' and earn more or equal to 30000, sorted by salary. \n");
 					queriesJWang.query2();
 					
 					System.out.println("==========================================================================================================================================\n");

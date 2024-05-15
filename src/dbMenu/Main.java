@@ -42,7 +42,7 @@ public class Main {
 		System.out.println("7. Try to UPDATE num nights from 5 to 10 for a certain customer\n");
 		System.out.println("\n========== Queries made by Jiayuan Wang ==========\n");
 		System.out.println("8. Retrieve the rating of the restaurants that serve ‘cheesecake’ or ‘pepperonipizza’ which has at least one daily sale of an amount greater than 10000 but less than 20000.");
-		System.out.println("9. Retrieve the Fname, Lname, salary, and nº of hotels visited, for employees who are also customers, have not visited 'Biarritz' and earn more than 30000, sorted by salary.");
+		System.out.println("9. Retrieve the Fname, Lname, salary, and nº of hotels visited, for employees who are also customers, have not visited 'Biarritz' and earn more or equal to 30000, sorted by salary.");
 		System.out.println("10. List the genres where ALL the directors have directed at least a movie of that genre.");
 		System.out.println("11. (EXTRA) Retrieve the TripTo, DepartureDate, and totalNights of the trips that across all customers have more totalNights than the average.");
 		System.out.println("12. (EXTRA) Print the difference of dishesnames between the person that has eaten the most dishes and the least.");
