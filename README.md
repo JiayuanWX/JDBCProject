@@ -1,4 +1,4 @@
-## Database Programming Project
+# Database Programming Project
 
 ## Introduction
 This repository contains the source code and documentation for a database programming project completed as part of an academic course. The project focuses on the creation and manipulation of relational databases using MySQL and Java with JDBC.
