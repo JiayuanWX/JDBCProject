@@ -1,5 +1,8 @@
 # Database Programming Project
 
+> #### **Warning!**
+> This is not a real application. It is a project made by EHU students for Databases subject.
+
 ## Introduction
 This repository contains the source code and documentation for a database programming project completed as part of an academic course. The project focuses on the creation and manipulation of relational databases using MySQL and Java with JDBC.
 
@@ -24,7 +27,7 @@ To run the project locally, follow these steps:
 
 Clone the Repository:
 
-''git clone <repository_url>''
+``git clone <git@github.com:JiayuanWX/JDBCProject.git>``
 Database Setup:
 
 Create databases using MySQL.
